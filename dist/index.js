@@ -11,14 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@mikro-orm/core");
 const constants_1 = require("./constants");
+const Posts_1 = require("./entities/Posts");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const orm = yield core_1.MikroORM.init({
-        entities: [],
+        entities: [Posts_1.Post],
         dbName: "redditclone",
         type: "postgresql",
         debug: !constants_1.__prod__,
     });
+    const post = orm.em.create(Posts_1.Post, { title: "my first post" });
+    yield orm.em.persistAndFlush(post);
+    console.log("-----------------sql 2-----------------");
+    yield orm.em.nativeInsert(Posts_1.Post, { title: "my first post 2" });
 });
-main();
-console.log("hello there");
+main().catch((err) => {
+    console.error(err);
+});
 //# sourceMappingURL=index.js.map
